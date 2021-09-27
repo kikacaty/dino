@@ -115,11 +115,11 @@ def eval_linear(args):
 
     # Only validate the model
     test_stats = validate_network(val_loader, model, linear_classifier, args.n_last_blocks, args.avgpool_patchtokens)
-            print(f"Accuracy at epoch {epoch} of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
-            best_acc = max(best_acc, test_stats["acc1"])
-            print(f'Max accuracy so far: {best_acc:.2f}%')
-            log_stats = {**{k: v for k, v in log_stats.items()},
-                         **{f'test_{k}': v for k, v in test_stats.items()}}
+    print(f"Accuracy at epoch {epoch} of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
+    best_acc = max(best_acc, test_stats["acc1"])
+    print(f'Max accuracy so far: {best_acc:.2f}%')
+    log_stats = {**{k: v for k, v in log_stats.items()},
+                    **{f'test_{k}': v for k, v in test_stats.items()}}
 
     # for epoch in range(start_epoch, args.epochs):
     #     train_loader.sampler.set_epoch(epoch)
