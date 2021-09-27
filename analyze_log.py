@@ -56,7 +56,6 @@ def analyze_lincls_log(log_name):
     with open(log_name) as f:
         txt = f.read()
     m = re.findall(r'.+Acc@1 (\d+\.\d+) Acc@5 (\d+\.\d+)', txt)
-    st()
     cnt = 0
     mCE_list = np.zeros(2)
     corruption_accs = {}
@@ -76,7 +75,7 @@ def analyze_lincls_log(log_name):
     mces = compute_mce(corruption_accs)
 
     for k in range(2):
-            print(f"{KNN_PARAMS[k]}-NN classifier result: total mCE: {mces[k]}")
+            print(f"lincls{LINCLS_PARAMS[k]} classifier result: total mCE: {mces[k]}")
 
 
 if __name__ == '__main__':
