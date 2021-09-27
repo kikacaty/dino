@@ -63,6 +63,7 @@ def eval_linear(args):
         num_workers=args.num_workers,
         pin_memory=True,
     )
+
     print(f"Data loaded with {len(dataset_train)} train and {len(dataset_val)} val imgs.")
 
     # ============ building network ... ============
@@ -114,12 +115,40 @@ def eval_linear(args):
     best_acc = to_restore["best_acc"]
 
     # Only validate the model
+
+    # Baseline
+
     test_stats = validate_network(val_loader, model, linear_classifier, args.n_last_blocks, args.avgpool_patchtokens)
     print(f"Accuracy at epoch {epoch} of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
     best_acc = max(best_acc, test_stats["acc1"])
     print(f'Max accuracy so far: {best_acc:.2f}%')
-    log_stats = {**{k: v for k, v in log_stats.items()},
-                    **{f'test_{k}': v for k, v in test_stats.items()}}
+
+    # ImageNet-c
+    CORRUPTIONS = [
+        'gaussian_noise', 'shot_noise', 'impulse_noise', 'defocus_blur',
+        'glass_blur', 'motion_blur', 'zoom_blur', 'snow', 'frost', 'fog',
+        'brightness', 'contrast', 'elastic_transform', 'pixelate',
+        'jpeg_compression'
+    ]
+    for c in CORRUPTIONS:
+        print(c)
+        for s in range(1, 6):
+            print('s={}'.format(s))
+            dataset_val_c = ReturnIndexDataset(os.path.join("/home/scratch.sysarch_nvresearch/chaowei/datasets/imagenet/imagenet-c", c, str(s)), transform=transform)
+            val_loader_c = torch.utils.data.DataLoader(
+                val_loader_c,
+                batch_size=args.batch_size_per_gpu,
+                num_workers=args.num_workers,
+                pin_memory=True,
+            )
+            test_stats = validate_network(val_loader_c, model, linear_classifier, args.n_last_blocks, args.avgpool_patchtokens)
+            print(f"Accuracy at epoch {epoch} of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
+            best_acc = max(best_acc, test_stats["acc1"])
+            print(f'Max accuracy so far: {best_acc:.2f}%')
+
+
+    # log_stats = {**{k: v for k, v in log_stats.items()},
+    #                 **{f'test_{k}': v for k, v in test_stats.items()}}
 
     # for epoch in range(start_epoch, args.epochs):
     #     train_loader.sampler.set_epoch(epoch)
