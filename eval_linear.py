@@ -119,9 +119,9 @@ def eval_linear(args):
     # Baseline
 
     test_stats = validate_network(val_loader, model, linear_classifier, args.n_last_blocks, args.avgpool_patchtokens)
-    print(f"Accuracy at epoch {epoch} of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
-    best_acc = max(best_acc, test_stats["acc1"])
-    print(f'Max accuracy so far: {best_acc:.2f}%')
+    # print(f"Accuracy at epoch {epoch} of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
+    # best_acc = max(best_acc, test_stats["acc1"])
+    # print(f'Max accuracy so far: {best_acc:.2f}%')
 
     # ImageNet-c
     CORRUPTIONS = [
