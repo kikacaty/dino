@@ -55,22 +55,25 @@ def analyze_knn_log(log_name):
 def analyze_lincls_log(log_name):
     with open(log_name) as f:
         txt = f.read()
-    m = re.findall(r'.+ Acc@1: (\d+\.\d+), Acc@5: (\d+\.\d+)', txt)
+    m = re.findall(r'.+Acc@1 (\d+\.\d+) Acc@5 (\d+\.\d+)', txt)
+    st()
     cnt = 0
-    mCE_list = np.zeros(4)
+    mCE_list = np.zeros(2)
     corruption_accs = {}
-    for c in CORRUPTIONS:
-        # print(c)
-        ACC = np.zeros([4,5])
-        for s in range(5):
-            for i in range(2):
-                ACC[i,s] = float(m[cnt][0])
-                cnt += 1
-        corruption_accs[c] = ACC
-        # for k in range(4):
-        #     print(f"{KNN_PARAMS[k]}-NN classifier result: mCE: {mCE[k]}")
-        # mCE_list += mCE
-    
+    try:
+    	for c in CORRUPTIONS:
+		# print(c)
+		ACC = np.zeros([2,5])
+		for s in range(5):
+			for i in range(2):
+			ACC[i,s] = float(m[cnt][0])
+			cnt += 1
+		corruption_accs[c] = ACC
+	    	# for k in range(4):
+	    	#     print(f"{KNN_PARAMS[k]}-NN classifier result: mCE: {mCE[k]}")
+	    	# mCE_list += mCE
+    except:
+    	st()
     mces = compute_mce(corruption_accs)
 
     for k in range(2):
@@ -79,5 +82,5 @@ def analyze_lincls_log(log_name):
 
 if __name__ == '__main__':
     log_name = sys.argv[1]
-    analyze_knn_log(log_name)
+    #analyze_knn_log(log_name)
     analyze_lincls_log(log_name)
