@@ -104,7 +104,7 @@ def eval_linear(args):
     # Optionally resume from a checkpoint
     to_restore = {"epoch": 0, "best_acc": 0.}
     utils.restart_from_checkpoint(
-        os.path.join(args.output_dir, "checkpoint.pth.tar"),
+        args.lincls_checkpoint,
         run_variables=to_restore,
         state_dict=linear_classifier,
         optimizer=optimizer,
@@ -269,5 +269,6 @@ if __name__ == '__main__':
     parser.add_argument('--val_freq', default=1, type=int, help="Epoch frequency for validation.")
     parser.add_argument('--output_dir', default=".", help='Path to save logs and checkpoints')
     parser.add_argument('--num_labels', default=1000, type=int, help='Number of labels for linear classifier')
+    parser.add_argument('--lincls_checkpoint', default='', type=str, help="Path to pretrained weights to evaluate.")
     args = parser.parse_args()
     eval_linear(args)
