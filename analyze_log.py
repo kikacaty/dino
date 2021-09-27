@@ -64,10 +64,10 @@ def analyze_lincls_log(log_name):
     	for c in CORRUPTIONS:
 		    # print(c)
             ACC = np.zeros([2,5])
-                for s in range(5):
-                    for i in range(2):
-                    ACC[i,s] = float(m[cnt][0])
-                    cnt += 1
+            for s in range(5):
+                for i in range(2):
+                ACC[i,s] = float(m[cnt][0])
+                cnt += 1
             corruption_accs[c] = ACC
             # for k in range(4):
             #     print(f"{KNN_PARAMS[k]}-NN classifier result: mCE: {mCE[k]}")
