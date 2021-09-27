@@ -12,6 +12,7 @@ CORRUPTIONS = [
     ]
 
 KNN_PARAMS = ['10','20','100','200']
+LINCLS_PARAMS = ['@1', '@5']
 
 def compute_mce(corruption_accs):
     """Compute mCE (mean Corruption Error) normalized by AlexNet performance."""
@@ -27,7 +28,7 @@ def compute_mce(corruption_accs):
         mce += ce / 15
     return mce
 
-def analyze_log(log_name):
+def analyze_knn_log(log_name):
     with open(log_name) as f:
         txt = f.read()
     m = re.findall(r'.+ Top1: (\d+\.\d+), Top5: (\d+\.\d+)', txt)
@@ -49,10 +50,34 @@ def analyze_log(log_name):
     mces = compute_mce(corruption_accs)
 
     for k in range(4):
-            print(f"{KNN_PARAMS[k]}-NN classifier result: total mCE: {mces[k]}")
+            print(f"Lincls{KNN_PARAMS[k]} classifier result: total mCE: {mces[k]}")
 
+def analyze_lincls_log(log_name):
+    with open(log_name) as f:
+        txt = f.read()
+    m = re.findall(r'.+ Acc@1: (\d+\.\d+), Acc@5: (\d+\.\d+)', txt)
+    cnt = 0
+    mCE_list = np.zeros(4)
+    corruption_accs = {}
+    for c in CORRUPTIONS:
+        # print(c)
+        ACC = np.zeros([4,5])
+        for s in range(5):
+            for i in range(2):
+                ACC[i,s] = float(m[cnt][0])
+                cnt += 1
+        corruption_accs[c] = ACC
+        # for k in range(4):
+        #     print(f"{KNN_PARAMS[k]}-NN classifier result: mCE: {mCE[k]}")
+        # mCE_list += mCE
+    
+    mces = compute_mce(corruption_accs)
+
+    for k in range(2):
+            print(f"{KNN_PARAMS[k]}-NN classifier result: total mCE: {mces[k]}")
 
 
 if __name__ == '__main__':
     log_name = sys.argv[1]
-    analyze_log(log_name)
+    analyze_knn_log(log_name)
+    analyze_lincls_log(log_name)
