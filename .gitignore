@@ -3,4 +3,5 @@ __pycache__/
 *.yml
 train_feature_base
 *.log
+exp_output/
 
