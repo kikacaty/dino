@@ -89,6 +89,8 @@ def extract_feature_pipeline(args):
     test_labels = torch.tensor([s[-1] for s in dataset_val.samples]).long()
     # save features and labels
     if args.dump_features and dist.get_rank() == 0:
+        if not os.path.exists(args.dump_features):
+            os.makedirs(args.dump_features)
         torch.save(train_features.cpu(), os.path.join(args.dump_features, "trainfeat.pth"))
         torch.save(test_features.cpu(), os.path.join(args.dump_features, "testfeat.pth"))
         torch.save(train_labels.cpu(), os.path.join(args.dump_features, "trainlabels.pth"))
