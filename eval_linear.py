@@ -134,7 +134,7 @@ def eval_linear(args):
         print(c)
         for s in range(1, 6):
             print('s={}'.format(s))
-            dataset_val_c = ReturnIndexDataset(os.path.join("/home/scratch.sysarch_nvresearch/chaowei/datasets/imagenet/imagenet-c", c, str(s)), transform=transform)
+            dataset_val_c = datasets.ImageFolder(os.path.join("/home/scratch.sysarch_nvresearch/chaowei/datasets/imagenet/imagenet-c", c, str(s)), transform=transform)
             val_loader_c = torch.utils.data.DataLoader(
                 val_loader_c,
                 batch_size=args.batch_size_per_gpu,
